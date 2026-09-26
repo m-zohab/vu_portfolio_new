@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    /* Exact "Primary text" from the brand palette — kept as an explicit
+       hex (rather than text-ink-700, which is now the vivid brand blue)
+       so ordinary body copy stays dark and highly readable. */
+    @apply bg-paper font-sans text-[#172033] antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display text-ink-950;
+  }
+
+  /* Visible keyboard focus everywhere — accessibility baseline */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible {
+    @apply outline-none ring-2 ring-ink-700 ring-offset-2 ring-offset-paper transition-shadow duration-200;
+  }
+}
+
+@layer components {
+  /* Shared max-width + padding wrapper used by every page */
+  .section-container {
+    @apply mx-auto w-full max-w-6xl px-6 lg:px-8;
+  }
+
+  /* Offsets scroll targets so content doesn't hide behind the sticky navbar */
+  .section-anchor {
+    @apply scroll-mt-20;
+  }
+
+  /* Faint ruled-notebook texture, used once behind the hero — now a soft
+     blue-tinted grid so it reads as "technology" rather than "notebook". */
+  .grid-texture {
+    background-image: linear-gradient(
+        to right,
+        rgba(23, 105, 255, 0.05) 1px,
+        transparent 1px
+      ),
+      linear-gradient(to bottom, rgba(23, 105, 255, 0.05) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  /* Subtle rising hover-lift for cards (project/service/partner cards) —
+     pairs the existing shadow-lift utility with a slight upward motion and
+     a soft blue glow ring so the palette feels alive on hover. */
+  .card-hover {
+    @apply transition-all duration-300 ease-out;
+  }
+  .card-hover:hover {
+    @apply -translate-y-1 shadow-lift ring-1 ring-ink-200;
+  }
+
+  /* Shared button motion — used alongside each button's own colour classes
+     so every CTA across the site moves, lifts and shadows consistently. */
+  .btn-motion {
+    @apply transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:scale-[1.02] active:translate-y-0 active:scale-100;
+  }
+}
+
+/* Runs once per route change on the <main> wrapper in MainLayout — a single
+   orchestrated page-load moment rather than scattered per-section effects. */
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-enter {
+  animation: page-enter 0.45s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
